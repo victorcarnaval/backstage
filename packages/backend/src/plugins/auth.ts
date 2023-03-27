@@ -1,3 +1,4 @@
+import { DEFAULT_NAMESPACE, stringifyEntityRef } from '@backstage/catalog-model';
 import {
   createRouter,
   providers,
@@ -47,6 +48,24 @@ export default async function createPlugin(
             });
           },
           // resolver: providers.github.resolvers.usernameMatchingUserEntityName(),
+        },
+      }),
+
+      'keycloak-provider': providers.oidc.create({
+        signIn: {
+          resolver(info, ctx) {
+            const userRef = stringifyEntityRef({
+              kind: 'User',
+              name: info.result.userinfo.sub,
+              namespace: DEFAULT_NAMESPACE,
+            });
+            return ctx.issueToken({
+              claims: {
+                sub: userRef, // The user's own identity
+                ent: [userRef], // A list of identities that the user claims ownership through
+              },
+            });
+          },
         },
       }),
     },

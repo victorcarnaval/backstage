@@ -64,8 +64,21 @@ techdocs:
     type: 'local' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
 
 auth:
+  environment: development
+  ### Providing an auth.session.secret will enable session support in the auth-backend
+  session:
+    secret: 'BACKSTAGE IS AWESOME'
   # see https://backstage.io/docs/auth/ to learn about auth providers
-  providers: {}
+  providers:
+    keycloak-provider:
+      development:
+        metadataUrl: https://dev.login.mt.gov.br/auth/realms/mt-realm/.well-known/openid-configuration
+        clientId: backstage
+        clientSecret: x0fhXLEE0xuslNs808Oas9JzI8Nge7IH
+        authorizationUrl: https://dev.login.mt.gov.br/auth/realms/mt-realm/protocol/openid-connect/auth
+        tokenUrl: https://dev.login.mt.gov.br/auth/realms/mt-realm/protocol/openid-connect/token
+        prompt: auto
+
 
 scaffolder:
   # see https://backstage.io/docs/features/software-templates/configuration for software template options
